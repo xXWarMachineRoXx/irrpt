@@ -1,4 +1,6 @@
 <?php
+
+$verify_clicked = false;
 function console_log($output, $with_script_tags = true)
 {
     $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
@@ -10,9 +12,9 @@ function console_log($output, $with_script_tags = true)
 }
 
 if (array_key_exists('button1', $_POST)) {
-    exec("php configure.php",$output,$retval);
-    console_log($output);
-    console_log($retval);
+    button1();
+
+
 
 } else if (array_key_exists('button2', $_POST)) {
     exec("php configure.php");
@@ -22,7 +24,11 @@ if (array_key_exists('button1', $_POST)) {
 
 function button1()
 {
-    console_log("This is Button1 that is selected");
+    $GLOBALS['$verify_clicked'] = !$GLOBALS['$verify_clicked'];
+    console_log("This is Button1 that is selected",$GLOBALS['$verify_clicked']);
+    exec("php configure.php",$output,$retval);
+    console_log($output);
+    console_log($retval);
 }
 function button2()
 {
@@ -64,13 +70,13 @@ echo '';
 echo '<br>';
 echo '<br>';
 
-echo '';
+
 echo '<img src="./images/logo-light.png" alt="decorative">';
 echo '<h1> Router Configurator</h1>';
 echo '<p class="lead">tbRC is a all in one router configurator to retreive,track,update and exclue asn\'s. It can also send emails to operators who don\'t use irr databases.</p>';
 echo '<p>Before starting the process, you must verify that your installation is okay and ready to configure other routers.</p>';
 // echo '<span class="mb-5">&nbsp;</span>';
-echo '<form method="post">';
+echo '<form id="verify-install-form" method="post" onsubmit="'.button1().'">';
 
 echo '<input type="submit" value="Verify Installation " name="button1" class="btn btn-lg btn-secondary fw-bold border-white bg-white text-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">';
 echo '</input>';
@@ -86,22 +92,41 @@ echo '';
 echo '<span class="fs-6 fw-lighter"> &copy; 2022 <a href="https://tech-bridge.biz/" class="text-white">Techbridge</a></span>';
 echo '</footer>';
 echo '</div>';
+
+echo '<script>';
+echo 'var form = document.getElementById("verify-install-form");';
+echo 'function handleForm(event) { event.preventDefault(); }';
+echo 'form.addEventListener("submit", handleForm);';
+// echo ''
+echo '</script>';
 if($retval){
    
+    
+    
+    // echo $output_str;
+}else{
     echo '<!-- Button trigger modal -->';
-    echo '<button type="button" class="btn btn-lg btn-secondary fw-bold border-white bg-white text-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">';
+    echo '<button id="verify-install-button" type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">';
     echo 'Launch demo modal';
     echo '</button>';
     echo '';
     echo '<!-- Modal -->';
-    echo '<div class="modal fade show " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">';
+    echo '<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">';
     echo '<div class="modal-dialog">';
     echo '<div class="modal-content">';
     echo '<div class="modal-header">';
-    echo '<h5 class="modal-title text-dark" id="exampleModalLabel">Error </h5>';
+    echo '<h5 class="modal-title text-dark" id="exampleModalLabel">Error</h5>';
     echo '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
     echo '</div>';
-    echo '<div class="modal-body text-dark">';
+    echo '<div class="modal-body">';
+    $output_str=implode(" ",$output);
+    echo $output_str,"test";
+    // triggers modal 
+    // echo '<script>';
+    // echo 'const modal_trigger_button= document.getElementById("verify-install-button");';
+    // echo '';
+    // echo 'modal_trigger_button.click();';
+    // echo '</script>';
     echo '</div>';
     echo '<div class="modal-footer">';
     echo '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>';
@@ -110,10 +135,6 @@ if($retval){
     echo '</div>';
     echo '</div>';
     echo '</div>';
-    $output_str=implode(" ",$output);
-    // echo $output_str;
-}else{
-
 }
 echo '</body>';
 
