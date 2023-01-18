@@ -1,12 +1,13 @@
 IRRPT
 ======
 
-### Sponsored by TorIX - The Toronto Internet Exchange
-* Originally written by Richard A Steenbergen <ras@e-gerbil.net>
-* Older versions can be found on sourceforge at [http://sourceforge.net/projects/irrpt/](http://sourceforge.net/projects/irrpt/)
-* IPv6 support added by Elisa Jasinska <elisa@bigwaveit.org> for version 2.0 
-* Bug Fixes provided by Anna Claiborne <domino@theshell.org> for version 2.0
+=================================================================
 
+  Copyright (c) 2022, TechBridge Consultancy Services LLP <support@tech-bridge.biz>
+  
+  All rights reserved.
+=================================================================
+  
 
 Summary
 -------
@@ -78,10 +79,7 @@ Requirements
 Installation
 -------------
 
-Make sure you have the required packages as listed above installed. Clone 
-the git respository in your desired install path via:
-https://github.com/6connect/irrpt.git
-Or, download the zip file and extract.
+
 Run 'php configure.php' in the base installation directory.
 
 To get started, you probably want to take a look at every file in 

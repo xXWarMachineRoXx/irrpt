@@ -63,21 +63,20 @@ echo '<main class="px-3 mt-5">';
 echo '';
 echo '<br>';
 echo '<br>';
-echo '<br>';
-echo '<br>';
-echo '<br>';
+
 echo '';
+echo '<img src="./images/logo-light.png" alt="decorative">';
 echo '<h1> Router Configurator</h1>';
 echo '<p class="lead">tbRC is a all in one router configurator to retreive,track,update and exclue asn\'s. It can also send emails to operators who don\'t use irr databases.</p>';
+echo '<p>Before starting the process, you must verify that your installation is okay and ready to configure other routers.</p>';
+// echo '<span class="mb-5">&nbsp;</span>';
 echo '<form method="post">';
 
-echo '<input type="submit" value="Start Configurator" name="button1" class="btn btn-lg btn-secondary fw-bold border-white bg-white text-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">';
+echo '<input type="submit" value="Verify Installation " name="button1" class="btn btn-lg btn-secondary fw-bold border-white bg-white text-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">';
 echo '</input>';
 echo '</form>';
 echo '</main>';
 echo '';
-echo '<br>';
-echo '<br>';
 echo '<br>';
 echo '<br>';
 echo '<br>';
@@ -87,11 +86,6 @@ echo '';
 echo '<span class="fs-6 fw-lighter"> &copy; 2022 <a href="https://tech-bridge.biz/" class="text-white">Techbridge</a></span>';
 echo '</footer>';
 echo '</div>';
-echo '';
-echo '';
-echo '';
-echo '';
-echo '';
 if($retval){
    
     echo '<!-- Button trigger modal -->';
@@ -118,6 +112,8 @@ if($retval){
     echo '</div>';
     $output_str=implode(" ",$output);
     // echo $output_str;
+}else{
+
 }
 echo '</body>';
 

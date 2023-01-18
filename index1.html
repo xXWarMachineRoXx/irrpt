@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>tbRC | Router Configurator</title>
+  <title>Demo</title>
   <!-- <script src="./index.js"></script> -->
   <link rel="icon" type="image/x-icon" href="favicon/favicon-light.ico">
   <link rel="stylesheet" href="./cover.css">
@@ -19,67 +19,46 @@
 
 
 <body class="d-flex h-100 text-center text-white bg-dark">
+  <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Launch demo modal
+</button>
 
-  <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-    <header class="mb-auto">
-      <div>
-        <h3 class="float-md-start mb-0">tbRC</h3>
-        <nav class="nav nav-masthead justify-content-center float-md-end">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-          <a class="nav-link" href="#">Features</a>
-          <a class="nav-link" href="#">Contact</a>
-        </nav>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-    </header>
-    <?php
-      if(array_key_exists('button1', $_POST)) {
-          button1();
-      }
-      else if(array_key_exists('button2', $_POST)) {
-          button2();
-      }
-      function button1() {
-          echo "This is Button1 that is selected";
-      }
-      function button2() {
-          echo "This is Button3 that is selected";
-      }
-  ?>
-    <main class="px-3 mt-5">
-
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-
-      <h1> Router Configurator</h1>
-      <p class="lead">tbRC is a all in one router configurator to retreive,track,update and exclue asn's. It can also
-        send emails to operators who don't use irr databases.</p>
-      <form method="post">
-        <input type="submit" name="button1" id="button1" class="btn btn-lg btn-secondary fw-bold border-white bg-white text-dark"
-          value="Start Configurator" />
-
-      </form>
-    </main>
-
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <footer class="mt-auto text-white-50 lh-sm fs-6 fw-lighter">
-
-
-      <span class="fs-6 fw-lighter"> &copy; 2022 <a href="https://tech-bridge.biz/"
-          class="text-white">Techbridge</a></span>
-    </footer>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
   </div>
-
-
-
-
-
+</div>
+<div class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Modal body text goes here.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 
 
