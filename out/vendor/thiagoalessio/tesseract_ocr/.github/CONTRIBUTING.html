@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Contributing</title>
+        <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <h1 id="contributing">Contributing</h1>
+<h2 id="introduction-to-the-project">Introduction to the project</h2>
+<p><strong>tesseract-ocr-for-php</strong> is just a convenient way to generate and execute
+<code>tesseract</code> commands inside PHP scripts, offering some <a href="https://en.wikipedia.org/wiki/Syntactic_sugar">syntactic sugar</a> for
+lengthy options and accounting for differences required by different Tesseract
+versions.</p>
+<p>In a nutshell, it simply gathers the options set by the user, builds a valid
+<code>tesseract</code> command as a string, runs it with <a href="http://php.net/exec">exec</a> and returns the command
+output.</p>
+<p>I plan to eventually interact with Tesseract via its <a href="https://github.com/tesseract-ocr/tesseract/blob/master/api/baseapi.h">baseapi</a> instead of
+relying on its command-line through <a href="http://php.net/exec">exec</a>, but for now I'd say that the
+current implementation is good enough, serves well its purpose and is easy to
+maintain.</p>
+<h2 id="how-the-project-is-organized">How the project is organized</h2>
+<pre><code>src/
+├── TesseractOCR.php
+├── Command.php
+└── Option.php
+</code></pre>
+<h6 id="srctesseractocrphp"><code>src/TesseractOCR.php</code></h6>
+<p>This is the only class exposed for consumption, the project's public <a href="https://github.com/thiagoalessio/tesseract-ocr-for-php#api">API</a>.
+The user sets Tesseract options by invoking methods to an instance of this
+class. Those method calls are collected as command options.</p>
+<h6 id="srccommandphp"><code>src/Command.php</code></h6>
+<p>This class is responsible for building the <code>tesseract</code> command, with all flags
+and options on the expected order.</p>
+<h6 id="srcoptionphp"><code>src/Option.php</code></h6>
+<p>Each method of this class represents a corresponding command-line option
+offered by the <code>tesseract</code> binary.</p>
+<h2 id="tests">Tests</h2>
+<p>Historically I've been very strict about pull requests without tests, but
+some time ago I decided to stop using <a href="https://phpunit.de">PHPUnit</a> for testing this project
+(you can find the reasons on the message of commit <a href="https://github.com/thiagoalessio/tesseract-ocr-for-php/commit/23336c658f162a73cf961fecf3cb42f6ee1fdf6e">23336c6</a>).
+So it no longer makes no sense to have such strict policy. And more than that,
+enforcing tests was discouraging novice programmers from contributing.</p>
+<p>That means you are free to place pull requests without tests, and I should just
+be grateful that someone is willing to help.
+But if you are comfortable writing tests, I definitely encourage you to write
+some!
+If that is the that case, here is an overview of the kinds of tests currently
+present on the project:</p>
+<h3 id="unit">Unit</h3>
+<p>It reflects the same structure of <code>src</code>, having one test class for each
+corresponding <code>src</code> class:</p>
+<pre><code>tests/Unit/
+├── TesseractOCRTest.php
+├── CommandTest.php
+└── OptionTest.php
+</code></pre>
+<p>Important to highlight that Unit Tests will never invoke the real <code>tesseract</code>
+binary.</p>
+<p>To run them:</p>
+<pre><code>$ php tests/run.php unit
+</code></pre>
+<h3 id="end-to-end">End To End</h3>
+<p>As the name implies, this kind of test will run the whole thing, using real
+images and invoking the <code>tesseract</code> binary. Nothing is stubbed nor mocked.</p>
+<p>The purpose of those tests is to simulate exactly how a user of this project
+would interact with it.</p>
+<p>To run them:</p>
+<pre><code>$ php tests/run.php e2e
+</code></pre>
+<h2 id="thank-you-very-much-for-taking-the-time-to-contribute">Thank you very much for taking the time to contribute!</h2>
+<p>:green_heart::yellow_heart::heart::purple_heart::blue_heart::black_heart:</p>
+
+        <script async src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+        
+    </body>
+    </html>

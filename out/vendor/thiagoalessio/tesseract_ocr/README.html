@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tesseract OCR for PHP</title>
+        <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <img src="https://thiagoalessio.github.io/tesseract-ocr-for-php/images/logo.png" alt="Tesseract OCR for PHP" align="right" width="320px"/>
+<h1 id="tesseract-ocr-for-php">Tesseract OCR for PHP</h1>
+<p>A wrapper to work with Tesseract OCR inside PHP.</p>
+<p><a href="https://github.com/thiagoalessio/tesseract-ocr-for-php/actions?query=workflow%3ACI"><img src="https://github.com/thiagoalessio/tesseract-ocr-for-php/workflows/CI/badge.svg?event=push&amp;branch=main" alt="CI"></a>
+<a href="https://ci.appveyor.com/project/thiagoalessio/tesseract-ocr-for-php/branch/main"><img src="https://ci.appveyor.com/api/projects/status/xwy5ls0798iwcim3/branch/main?svg=true" alt="AppVeyor"></a>
+<a href="https://www.codacy.com/app/thiagoalessio/tesseract-ocr-for-php?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=thiagoalessio/tesseract-ocr-for-php&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/024c8814aecf40329500df267134c623" alt="Codacy"></a>
+<a href="https://codecov.io/gh/thiagoalessio/tesseract-ocr-for-php"><img src="https://codecov.io/gh/thiagoalessio/tesseract-ocr-for-php/branch/main/graph/badge.svg?token=Y0VnrqiSIf" alt="Test Coverage"></a>
+<br/>
+<a href="https://packagist.org/packages/thiagoalessio/tesseract_ocr"><img src="https://img.shields.io/packagist/v/thiagoalessio/tesseract_ocr.svg" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/thiagoalessio/tesseract_ocr"><img src="https://img.shields.io/packagist/dt/thiagoalessio/tesseract_ocr.svg" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/thiagoalessio/tesseract_ocr"><img src="https://img.shields.io/packagist/dm/thiagoalessio/tesseract_ocr.svg" alt="Monthly Downloads"></a>
+<br/>
+<a href="https://gitter.im/thiagoalessio/tesseract-ocr-for-php?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://img.shields.io/gitter/room/thiagoalessio/tesseract-ocr-for-php.svg?logo=gitter-white&amp;colorB=33cc99" alt="Join the chat"></a></p>
+<h2 id="installation">Installation</h2>
+<p>Via <a href="http://getcomposer.org/">Composer</a>:</p>
+<pre><code>$ composer require thiagoalessio/tesseract_ocr
+</code></pre>
+<p>:bangbang: <strong>This library depends on <a href="https://github.com/tesseract-ocr/tesseract">Tesseract OCR</a>, version <em>3.02</em> or later.</strong></p>
+<br/>
+<h3 id="-note-for-windows-users"><img src="https://thiagoalessio.github.io/tesseract-ocr-for-php/images/windows-18.svg" alt=""> Note for Windows users</h3>
+<p>There are <a href="https://github.com/tesseract-ocr/tesseract/wiki#windows">many ways</a> to install
+<a href="https://github.com/tesseract-ocr/tesseract">Tesseract OCR</a> on your system, but if you just want something quick to
+get up and running, I recommend installing the <a href="https://chocolatey.org/packages/capture2text">Capture2Text</a> package with
+<a href="https://chocolatey.org">Chocolatey</a>.</p>
+<pre><code>choco install capture2text --version 3.9
+</code></pre>
+<p>:warning: Recent versions of <a href="https://chocolatey.org/packages/capture2text">Capture2Text</a> stopped shipping the <code>tesseract</code> binary.</p>
+<br/>
+<h3 id="-note-for-macos-users"><img src="https://thiagoalessio.github.io/tesseract-ocr-for-php/images/apple-18.svg" alt=""> Note for macOS users</h3>
+<p>With <a href="https://www.macports.org">MacPorts</a> you can install support for individual languages, like so:</p>
+<pre><code>$ sudo port install tesseract-&lt;langcode&gt;
+</code></pre>
+<p>But that is not possible with <a href="https://brew.sh">Homebrew</a>. It comes only with <strong>English</strong> support
+by default, so if you intend to use it for other language, the quickest solution
+is to install them all:</p>
+<pre><code>$ brew install tesseract tesseract-lang
+</code></pre>
+<br/>
+<h2 id="usage">Usage</h2>
+<h3 id="basic-usage">Basic usage</h3>
+<img align="right" width="50%" title="The quick brown fox jumps over the lazy dog." src="file:////var/www/html/ocr_sample/vendor/thiagoalessio/tesseract_ocr/tests/EndToEnd/images/text.png"/>
+<pre><code class="language-php"><span class="hljs-keyword">use</span> <span class="hljs-title">thiagoalessio</span>\<span class="hljs-title">TesseractOCR</span>\<span class="hljs-title">TesseractOCR</span>;
+<span class="hljs-keyword">echo</span> (<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>(<span class="hljs-string">&#x27;text.png&#x27;</span>))
+    -&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<pre><code>The quick brown fox
+jumps over
+the lazy dog.
+</code></pre>
+<br/>
+<h3 id="other-languages">Other languages</h3>
+<img align="right" width="50%" title="Bülowstraße" src="file:////var/www/html/ocr_sample/vendor/thiagoalessio/tesseract_ocr/tests/EndToEnd/images/german.png"/>
+<pre><code class="language-php"><span class="hljs-keyword">use</span> <span class="hljs-title">thiagoalessio</span>\<span class="hljs-title">TesseractOCR</span>\<span class="hljs-title">TesseractOCR</span>;
+<span class="hljs-keyword">echo</span> (<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>(<span class="hljs-string">&#x27;german.png&#x27;</span>))
+    -&gt;<span class="hljs-title function_ invoke__">lang</span>(<span class="hljs-string">&#x27;deu&#x27;</span>)
+    -&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<pre><code>Bülowstraße
+</code></pre>
+<br/>
+<h3 id="multiple-languages">Multiple languages</h3>
+<img align="right" width="50%" title="I eat すし y Pollo" src="file:////var/www/html/ocr_sample/vendor/thiagoalessio/tesseract_ocr/tests/EndToEnd/images/mixed-languages.png"/>
+<pre><code class="language-php"><span class="hljs-keyword">use</span> <span class="hljs-title">thiagoalessio</span>\<span class="hljs-title">TesseractOCR</span>\<span class="hljs-title">TesseractOCR</span>;
+<span class="hljs-keyword">echo</span> (<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>(<span class="hljs-string">&#x27;mixed-languages.png&#x27;</span>))
+    -&gt;<span class="hljs-title function_ invoke__">lang</span>(<span class="hljs-string">&#x27;eng&#x27;</span>, <span class="hljs-string">&#x27;jpn&#x27;</span>, <span class="hljs-string">&#x27;spa&#x27;</span>)
+    -&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<pre><code>I eat すし y Pollo
+</code></pre>
+<br/>
+<h3 id="inducing-recognition">Inducing recognition</h3>
+<img align="right" width="50%" title="8055" src="file:////var/www/html/ocr_sample/vendor/thiagoalessio/tesseract_ocr/tests/EndToEnd/images/8055.png"/>
+<pre><code class="language-php"><span class="hljs-keyword">use</span> <span class="hljs-title">thiagoalessio</span>\<span class="hljs-title">TesseractOCR</span>\<span class="hljs-title">TesseractOCR</span>;
+<span class="hljs-keyword">echo</span> (<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>(<span class="hljs-string">&#x27;8055.png&#x27;</span>))
+    -&gt;<span class="hljs-title function_ invoke__">allowlist</span>(<span class="hljs-title function_ invoke__">range</span>(<span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;Z&#x27;</span>))
+    -&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<pre><code>BOSS
+</code></pre>
+<br/>
+<h3 id="breaking-captchas">Breaking CAPTCHAs</h3>
+<p>Yes, I know some of you might want to use this library for the <em>noble</em> purpose
+of breaking CAPTCHAs, so please take a look at this comment:</p>
+<p><a href="https://github.com/thiagoalessio/tesseract-ocr-for-php/issues/91#issuecomment-342290510">https://github.com/thiagoalessio/tesseract-ocr-for-php/issues/91#issuecomment-342290510</a></p>
+<h2 id="api">API</h2>
+<h3 id="run">run</h3>
+<p>Executes a <code>tesseract</code> command, optionally receiving an integer as <code>timeout</code>,
+in case you experience stalled tesseract processes.</p>
+<pre><code class="language-php"><span class="hljs-variable">$ocr</span> = <span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>();
+<span class="hljs-variable">$ocr</span>-&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<pre><code class="language-php"><span class="hljs-variable">$ocr</span> = <span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>();
+<span class="hljs-variable">$timeout</span> = <span class="hljs-number">500</span>;
+<span class="hljs-variable">$ocr</span>-&gt;<span class="hljs-title function_ invoke__">run</span>(<span class="hljs-variable">$timeout</span>);
+</code></pre>
+<h3 id="image">image</h3>
+<p>Define the path of an image to be recognized by <code>tesseract</code>.</p>
+<pre><code class="language-php"><span class="hljs-variable">$ocr</span> = <span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>();
+<span class="hljs-variable">$ocr</span>-&gt;<span class="hljs-title function_ invoke__">image</span>(<span class="hljs-string">&#x27;/path/to/image.png&#x27;</span>);
+<span class="hljs-variable">$ocr</span>-&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<h3 id="imagedata">imageData</h3>
+<p>Set the image to be recognized by <code>tesseract</code> from a string, with its size.
+This can be useful when dealing with files that are already loaded in memory.
+You can easily retrieve the image data and size of an image object :</p>
+<pre><code class="language-php"><span class="hljs-comment">//Using Imagick</span>
+<span class="hljs-variable">$data</span> = <span class="hljs-variable">$img</span>-&gt;<span class="hljs-title function_ invoke__">getImageBlob</span>();
+<span class="hljs-variable">$size</span> = <span class="hljs-variable">$img</span>-&gt;<span class="hljs-title function_ invoke__">getImageLength</span>();
+<span class="hljs-comment">//Using GD</span>
+<span class="hljs-title function_ invoke__">ob_start</span>();
+<span class="hljs-comment">// Note that you can use any format supported by tesseract</span>
+<span class="hljs-title function_ invoke__">imagepng</span>(<span class="hljs-variable">$img</span>, <span class="hljs-literal">null</span>, <span class="hljs-number">0</span>);
+<span class="hljs-variable">$size</span> = <span class="hljs-title function_ invoke__">ob_get_length</span>();
+<span class="hljs-variable">$data</span> = <span class="hljs-title function_ invoke__">ob_get_clean</span>();
+
+<span class="hljs-variable">$ocr</span> = <span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>();
+<span class="hljs-variable">$ocr</span>-&gt;<span class="hljs-title function_ invoke__">imageData</span>(<span class="hljs-variable">$data</span>, <span class="hljs-variable">$size</span>);
+<span class="hljs-variable">$ocr</span>-&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<h3 id="executable">executable</h3>
+<p>Define a custom location of the <code>tesseract</code> executable,
+if by any reason it is not present in the <code>$PATH</code>.</p>
+<pre><code class="language-php"><span class="hljs-keyword">echo</span> (<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>(<span class="hljs-string">&#x27;img.png&#x27;</span>))
+    -&gt;<span class="hljs-title function_ invoke__">executable</span>(<span class="hljs-string">&#x27;/path/to/tesseract&#x27;</span>)
+    -&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<h3 id="version">version</h3>
+<p>Returns the current version of <code>tesseract</code>.</p>
+<pre><code class="language-php"><span class="hljs-keyword">echo</span> (<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>())-&gt;<span class="hljs-title function_ invoke__">version</span>();
+</code></pre>
+<h3 id="availablelanguages">availableLanguages</h3>
+<p>Returns a list of available languages/scripts.</p>
+<pre><code class="language-php"><span class="hljs-keyword">foreach</span>((<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>())-&gt;<span class="hljs-title function_ invoke__">availableLanguages</span>() <span class="hljs-keyword">as</span> <span class="hljs-variable">$lang</span>) <span class="hljs-keyword">echo</span> <span class="hljs-variable">$lang</span>;
+</code></pre>
+<p><strong>More info:</strong> <a href="https://github.com/tesseract-ocr/tesseract/blob/master/doc/tesseract.1.asc#languages-and-scripts">https://github.com/tesseract-ocr/tesseract/blob/master/doc/tesseract.1.asc#languages-and-scripts</a></p>
+<h3 id="tessdatadir">tessdataDir</h3>
+<p>Specify a custom location for the tessdata directory.</p>
+<pre><code class="language-php"><span class="hljs-keyword">echo</span> (<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>(<span class="hljs-string">&#x27;img.png&#x27;</span>))
+    -&gt;<span class="hljs-title function_ invoke__">tessdataDir</span>(<span class="hljs-string">&#x27;/path&#x27;</span>)
+    -&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<h3 id="userwords">userWords</h3>
+<p>Specify the location of user words file.</p>
+<p>This is a plain text file containing a list of words that you want to be
+considered as a normal dictionary words by <code>tesseract</code>.</p>
+<p>Useful when dealing with contents that contain technical terminology, jargon,
+etc.</p>
+<pre><code>$ cat /path/to/user-words.txt
+foo
+bar
+</code></pre>
+<pre><code class="language-php"><span class="hljs-keyword">echo</span> (<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>(<span class="hljs-string">&#x27;img.png&#x27;</span>))
+    -&gt;<span class="hljs-title function_ invoke__">userWords</span>(<span class="hljs-string">&#x27;/path/to/user-words.txt&#x27;</span>)
+    -&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<h3 id="userpatterns">userPatterns</h3>
+<p>Specify the location of user patterns file.</p>
+<p>If the contents you are dealing with have known patterns, this option can help
+a lot tesseract's recognition accuracy.</p>
+<pre><code>$ cat /path/to/user-patterns.txt'
+1-\d\d\d-GOOG-441
+www.\n\\\*.com
+</code></pre>
+<pre><code class="language-php"><span class="hljs-keyword">echo</span> (<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>(<span class="hljs-string">&#x27;img.png&#x27;</span>))
+    -&gt;<span class="hljs-title function_ invoke__">userPatterns</span>(<span class="hljs-string">&#x27;/path/to/user-patterns.txt&#x27;</span>)
+    -&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<h3 id="lang">lang</h3>
+<p>Define one or more languages to be used during the recognition.
+A complete list of available languages can be found at:
+<a href="https://github.com/tesseract-ocr/tesseract/blob/master/doc/tesseract.1.asc#languages">https://github.com/tesseract-ocr/tesseract/blob/master/doc/tesseract.1.asc#languages</a></p>
+<p><strong>Tip from <a href="https://github.com/daijiale">@daijiale</a>:</strong> Use the combination <code>-&gt;lang('chi_sim', 'chi_tra')</code>
+for proper recognition of Chinese.</p>
+<pre><code class="language-php"> <span class="hljs-keyword">echo</span> (<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>(<span class="hljs-string">&#x27;img.png&#x27;</span>))
+     -&gt;<span class="hljs-title function_ invoke__">lang</span>(<span class="hljs-string">&#x27;lang1&#x27;</span>, <span class="hljs-string">&#x27;lang2&#x27;</span>, <span class="hljs-string">&#x27;lang3&#x27;</span>)
+     -&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<h3 id="psm">psm</h3>
+<p>Specify the Page Segmentation Method, which instructs <code>tesseract</code> how to
+interpret the given image.</p>
+<p><strong>More info:</strong> <a href="https://github.com/tesseract-ocr/tesseract/wiki/ImproveQuality#page-segmentation-method">https://github.com/tesseract-ocr/tesseract/wiki/ImproveQuality#page-segmentation-method</a></p>
+<pre><code class="language-php"><span class="hljs-keyword">echo</span> (<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>(<span class="hljs-string">&#x27;img.png&#x27;</span>))
+    -&gt;<span class="hljs-title function_ invoke__">psm</span>(<span class="hljs-number">6</span>)
+    -&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<h3 id="oem">oem</h3>
+<p>Specify the OCR Engine Mode. (see <code>tesseract --help-oem</code>)</p>
+<pre><code class="language-php"><span class="hljs-keyword">echo</span> (<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>(<span class="hljs-string">&#x27;img.png&#x27;</span>))
+    -&gt;<span class="hljs-title function_ invoke__">oem</span>(<span class="hljs-number">2</span>)
+    -&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<h3 id="dpi">dpi</h3>
+<p>Specify the image DPI. It is useful if your image does not contain this information in its metadata.</p>
+<pre><code class="language-php"><span class="hljs-keyword">echo</span> (<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>(<span class="hljs-string">&#x27;img.png&#x27;</span>))
+    -&gt;<span class="hljs-title function_ invoke__">dpi</span>(<span class="hljs-number">300</span>)
+    -&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<h3 id="allowlist">allowlist</h3>
+<p>This is a shortcut for <code>-&gt;config('tessedit_char_whitelist', 'abcdef....')</code>.</p>
+<pre><code class="language-php"><span class="hljs-keyword">echo</span> (<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>(<span class="hljs-string">&#x27;img.png&#x27;</span>))
+    -&gt;<span class="hljs-title function_ invoke__">allowlist</span>(<span class="hljs-title function_ invoke__">range</span>(<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;z&#x27;</span>), <span class="hljs-title function_ invoke__">range</span>(<span class="hljs-number">0</span>, <span class="hljs-number">9</span>), <span class="hljs-string">&#x27;-_@&#x27;</span>)
+    -&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<h3 id="configfile">configFile</h3>
+<p>Specify a config file to be used. It can either be the path to your own
+config file or the name of one of the predefined config files:
+<a href="https://github.com/tesseract-ocr/tesseract/tree/master/tessdata/configs">https://github.com/tesseract-ocr/tesseract/tree/master/tessdata/configs</a></p>
+<pre><code class="language-php"><span class="hljs-keyword">echo</span> (<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>(<span class="hljs-string">&#x27;img.png&#x27;</span>))
+    -&gt;<span class="hljs-title function_ invoke__">configFile</span>(<span class="hljs-string">&#x27;hocr&#x27;</span>)
+    -&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<h3 id="setoutputfile">setOutputFile</h3>
+<p>Specify an Outputfile to be used. Be aware: If you set an outputfile then
+the option <code>withoutTempFiles</code> is ignored.
+Tempfiles are written (and deleted) even if <code>withoutTempFiles = true</code>.</p>
+<p>In combination with <code>configFile</code> you are able to get the <code>hocr</code>, <code>tsv</code> or
+<code>pdf</code> files.</p>
+<pre><code class="language-php"><span class="hljs-keyword">echo</span> (<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>(<span class="hljs-string">&#x27;img.png&#x27;</span>))
+    -&gt;<span class="hljs-title function_ invoke__">configFile</span>(<span class="hljs-string">&#x27;pdf&#x27;</span>)
+    -&gt;<span class="hljs-title function_ invoke__">setOutputFile</span>(<span class="hljs-string">&#x27;/PATH_TO_MY_OUTPUTFILE/searchable.pdf&#x27;</span>);
+    -&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<h3 id="digits">digits</h3>
+<p>Shortcut for <code>-&gt;configFile('digits')</code>.</p>
+<pre><code class="language-php"><span class="hljs-keyword">echo</span> (<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>(<span class="hljs-string">&#x27;img.png&#x27;</span>))
+    -&gt;<span class="hljs-title function_ invoke__">digits</span>()
+    -&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<h3 id="hocr">hocr</h3>
+<p>Shortcut for <code>-&gt;configFile('hocr')</code>.</p>
+<pre><code class="language-php"><span class="hljs-keyword">echo</span> (<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>(<span class="hljs-string">&#x27;img.png&#x27;</span>))
+    -&gt;<span class="hljs-title function_ invoke__">hocr</span>()
+    -&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<h3 id="pdf">pdf</h3>
+<p>Shortcut for <code>-&gt;configFile('pdf')</code>.</p>
+<pre><code class="language-php"><span class="hljs-keyword">echo</span> (<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>(<span class="hljs-string">&#x27;img.png&#x27;</span>))
+    -&gt;<span class="hljs-title function_ invoke__">pdf</span>()
+    -&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<h3 id="quiet">quiet</h3>
+<p>Shortcut for <code>-&gt;configFile('quiet')</code>.</p>
+<pre><code class="language-php"><span class="hljs-keyword">echo</span> (<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>(<span class="hljs-string">&#x27;img.png&#x27;</span>))
+    -&gt;<span class="hljs-title function_ invoke__">quiet</span>()
+    -&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<h3 id="tsv">tsv</h3>
+<p>Shortcut for <code>-&gt;configFile('tsv')</code>.</p>
+<pre><code class="language-php"><span class="hljs-keyword">echo</span> (<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>(<span class="hljs-string">&#x27;img.png&#x27;</span>))
+    -&gt;<span class="hljs-title function_ invoke__">tsv</span>()
+    -&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<h3 id="txt">txt</h3>
+<p>Shortcut for <code>-&gt;configFile('txt')</code>.</p>
+<pre><code class="language-php"><span class="hljs-keyword">echo</span> (<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>(<span class="hljs-string">&#x27;img.png&#x27;</span>))
+    -&gt;<span class="hljs-title function_ invoke__">txt</span>()
+    -&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<h3 id="tempdir">tempDir</h3>
+<p>Define a custom directory to store temporary files generated by tesseract.
+Make sure the directory actually exists and the user running <code>php</code> is allowed
+to write in there.</p>
+<pre><code class="language-php"><span class="hljs-keyword">echo</span> (<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>(<span class="hljs-string">&#x27;img.png&#x27;</span>))
+    -&gt;<span class="hljs-title function_ invoke__">tempDir</span>(<span class="hljs-string">&#x27;./my/custom/temp/dir&#x27;</span>)
+    -&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<h3 id="withouttempfiles">withoutTempFiles</h3>
+<p>Specify that <code>tesseract</code> should output the recognized text without writing to temporary files.
+The data is gathered from the standard output of <code>tesseract</code> instead.</p>
+<pre><code class="language-php"><span class="hljs-keyword">echo</span> (<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>(<span class="hljs-string">&#x27;img.png&#x27;</span>))
+    -&gt;<span class="hljs-title function_ invoke__">withoutTempFiles</span>()
+    -&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<h3 id="other-options">Other options</h3>
+<p>Any configuration option offered by Tesseract can be used like that:</p>
+<pre><code class="language-php"><span class="hljs-keyword">echo</span> (<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>(<span class="hljs-string">&#x27;img.png&#x27;</span>))
+    -&gt;<span class="hljs-title function_ invoke__">config</span>(<span class="hljs-string">&#x27;config_var&#x27;</span>, <span class="hljs-string">&#x27;value&#x27;</span>)
+    -&gt;<span class="hljs-title function_ invoke__">config</span>(<span class="hljs-string">&#x27;other_config_var&#x27;</span>, <span class="hljs-string">&#x27;other value&#x27;</span>)
+    -&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<p>Or like that:</p>
+<pre><code class="language-php"><span class="hljs-keyword">echo</span> (<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>(<span class="hljs-string">&#x27;img.png&#x27;</span>))
+    -&gt;<span class="hljs-title function_ invoke__">configVar</span>(<span class="hljs-string">&#x27;value&#x27;</span>)
+    -&gt;<span class="hljs-title function_ invoke__">otherConfigVar</span>(<span class="hljs-string">&#x27;other value&#x27;</span>)
+    -&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<p><strong>More info:</strong> <a href="https://github.com/tesseract-ocr/tesseract/wiki/ControlParams">https://github.com/tesseract-ocr/tesseract/wiki/ControlParams</a></p>
+<h3 id="thread-limit">Thread-limit</h3>
+<p>Sometimes, it may be useful to limit the number of threads that tesseract is
+allowed to use (e.g. in <a href="https://github.com/tesseract-ocr/tesseract/issues/898">this case</a>).
+Set the maxmium number of threads as param for the <code>run</code> function:</p>
+<pre><code class="language-php"><span class="hljs-keyword">echo</span> (<span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">TesseractOCR</span>(<span class="hljs-string">&#x27;img.png&#x27;</span>))
+    -&gt;<span class="hljs-title function_ invoke__">threadLimit</span>(<span class="hljs-number">1</span>)
+    -&gt;<span class="hljs-title function_ invoke__">run</span>();
+</code></pre>
+<h2 id="where-to-get-help">Where to get help</h2>
+<p>Join the chat on <a href="https://gitter.im/thiagoalessio/tesseract-ocr-for-php?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge">Gitter</a>.</p>
+<h2 id="how-to-contribute">How to contribute</h2>
+<p>You can contribute to this project by:</p>
+<ul>
+<li>Helping new users on <a href="https://gitter.im/thiagoalessio/tesseract-ocr-for-php?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge">Gitter</a>;</li>
+<li>Opening an <a href="https://github.com/thiagoalessio/tesseract-ocr-for-php/issues">Issue</a> if you found a bug or wish to propose a new feature;</li>
+<li>Placing a <a href="https://github.com/thiagoalessio/tesseract-ocr-for-php/pulls">Pull Request</a> with code that fix a bug, missing/wrong documentation
+or implement a new feature;</li>
+</ul>
+<p>Just make sure you take a look at our <a href="https://github.com/thiagoalessio/tesseract-ocr-for-php/blob/main/.github/CODE_OF_CONDUCT.html">Code of Conduct</a> and <a href="https://github.com/thiagoalessio/tesseract-ocr-for-php/blob/main/.github/CONTRIBUTING.html">Contributing</a>
+instructions.</p>
+<h2 id="license">License</h2>
+<p>tesseract-ocr-for-php is released under the <a href="https://github.com/thiagoalessio/tesseract-ocr-for-php/blob/main/MIT-LICENSE">MIT License</a>.</p>
+<h2></h2><p align="center"><sub>Made with <sub><a href="#"><img src="https://thiagoalessio.github.io/tesseract-ocr-for-php/images/heart.svg" alt="love" width="14px"/></a></sub> in Berlin</sub></p>
+
+        <script async src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+        
+    </body>
+    </html>

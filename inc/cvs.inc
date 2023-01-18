@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 
 /* Cheesey class for our CVS access */

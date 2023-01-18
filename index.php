@@ -1,0 +1,127 @@
+<?php
+function console_log($output, $with_script_tags = true)
+{
+    $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) .
+        ');';
+    if ($with_script_tags) {
+        $js_code = '<script>' . $js_code . '</script>';
+    }
+    echo $js_code;
+}
+
+if (array_key_exists('button1', $_POST)) {
+    exec("php configure.php",$output,$retval);
+    console_log($output);
+    console_log($retval);
+
+} else if (array_key_exists('button2', $_POST)) {
+    exec("php configure.php");
+
+}
+
+
+function button1()
+{
+    console_log("This is Button1 that is selected");
+}
+function button2()
+{
+    console_log("This is Button2 that is selected");
+}
+echo '<head>';
+echo '';
+echo '<meta charset="UTF-8">';
+echo '<meta http-equiv="X-UA-Compatible" content="IE=edge">';
+echo '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
+echo '<title>tbRC | Router Configurator</title>';
+echo '<!-- <script src="./index.js"></script> -->';
+echo '<link rel="icon" type="image/x-icon" href="favicon/favicon-light.ico">';
+echo '<link rel="stylesheet" href="./cover.css">';
+echo '<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"';
+echo 'integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">';
+echo '<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"';
+echo 'integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"';
+echo 'crossorigin="anonymous"></script>';
+echo '</head>';
+echo '';
+echo '';
+echo '<body class="d-flex h-100 text-center text-white bg-dark">';
+echo '';
+echo '<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">';
+echo '<header class="mb-auto">';
+echo '<div>';
+echo '<h3 class="float-md-start mb-0">tbRC</h3>';
+echo '<nav class="nav nav-masthead justify-content-center float-md-end">';
+echo '<a class="nav-link active" aria-current="page" href="#">Home</a>';
+echo '<a class="nav-link" href="#">Features</a>';
+echo '<a class="nav-link" href="#">Contact</a>';
+echo '</nav>';
+echo '</div>';
+echo '</header>';
+echo '';
+echo '<main class="px-3 mt-5">';
+echo '';
+echo '<br>';
+echo '<br>';
+echo '<br>';
+echo '<br>';
+echo '<br>';
+echo '';
+echo '<h1> Router Configurator</h1>';
+echo '<p class="lead">tbRC is a all in one router configurator to retreive,track,update and exclue asn\'s. It can also send emails to operators who don\'t use irr databases.</p>';
+echo '<form method="post">';
+
+echo '<input type="submit" value="Start Configurator" name="button1" class="btn btn-lg btn-secondary fw-bold border-white bg-white text-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">';
+echo '</input>';
+echo '</form>';
+echo '</main>';
+echo '';
+echo '<br>';
+echo '<br>';
+echo '<br>';
+echo '<br>';
+echo '<br>';
+echo '<footer class="mt-auto text-white-50 lh-sm fs-6 fw-lighter">';
+echo '';
+echo '';
+echo '<span class="fs-6 fw-lighter"> &copy; 2022 <a href="https://tech-bridge.biz/" class="text-white">Techbridge</a></span>';
+echo '</footer>';
+echo '</div>';
+echo '';
+echo '';
+echo '';
+echo '';
+echo '';
+if($retval){
+   
+    echo '<!-- Button trigger modal -->';
+    echo '<button type="button" class="btn btn-lg btn-secondary fw-bold border-white bg-white text-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">';
+    echo 'Launch demo modal';
+    echo '</button>';
+    echo '';
+    echo '<!-- Modal -->';
+    echo '<div class="modal fade show " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">';
+    echo '<div class="modal-dialog">';
+    echo '<div class="modal-content">';
+    echo '<div class="modal-header">';
+    echo '<h5 class="modal-title text-dark" id="exampleModalLabel">Error </h5>';
+    echo '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
+    echo '</div>';
+    echo '<div class="modal-body text-dark">';
+    echo '</div>';
+    echo '<div class="modal-footer">';
+    echo '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>';
+    echo '<button type="button" class="btn btn-primary">Understood</button>';
+    echo '</div>';
+    echo '</div>';
+    echo '</div>';
+    echo '</div>';
+    $output_str=implode(" ",$output);
+    // echo $output_str;
+}
+echo '</body>';
+
+
+
+
+?>

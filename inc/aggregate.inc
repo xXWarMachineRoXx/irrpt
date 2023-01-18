@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 
 $currentpath = dirname(realpath(__FILE__));

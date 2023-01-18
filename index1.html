@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>tbRC | Router Configurator</title>
+  <!-- <script src="./index.js"></script> -->
+  <link rel="icon" type="image/x-icon" href="favicon/favicon-light.ico">
+  <link rel="stylesheet" href="./cover.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+</head>
+
+
+<body class="d-flex h-100 text-center text-white bg-dark">
+
+  <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <header class="mb-auto">
+      <div>
+        <h3 class="float-md-start mb-0">tbRC</h3>
+        <nav class="nav nav-masthead justify-content-center float-md-end">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+          <a class="nav-link" href="#">Features</a>
+          <a class="nav-link" href="#">Contact</a>
+        </nav>
+      </div>
+    </header>
+    <?php
+      if(array_key_exists('button1', $_POST)) {
+          button1();
+      }
+      else if(array_key_exists('button2', $_POST)) {
+          button2();
+      }
+      function button1() {
+          echo "This is Button1 that is selected";
+      }
+      function button2() {
+          echo "This is Button3 that is selected";
+      }
+  ?>
+    <main class="px-3 mt-5">
+
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+
+      <h1> Router Configurator</h1>
+      <p class="lead">tbRC is a all in one router configurator to retreive,track,update and exclue asn's. It can also
+        send emails to operators who don't use irr databases.</p>
+      <form method="post">
+        <input type="submit" name="button1" id="button1" class="btn btn-lg btn-secondary fw-bold border-white bg-white text-dark"
+          value="Start Configurator" />
+
+      </form>
+    </main>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <footer class="mt-auto text-white-50 lh-sm fs-6 fw-lighter">
+
+
+      <span class="fs-6 fw-lighter"> &copy; 2022 <a href="https://tech-bridge.biz/"
+          class="text-white">Techbridge</a></span>
+    </footer>
+  </div>
+
+
+
+
+
+</body>
+
+
+</html>

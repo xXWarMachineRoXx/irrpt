@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Sponsored by TorIX - The Toronto Internet Exchange</title>
+        <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <h1 id="irrpt">IRRPT</h1>
+<h3 id="sponsored-by-torix---the-toronto-internet-exchange">Sponsored by TorIX - The Toronto Internet Exchange</h3>
+<ul>
+<li>Originally written by Richard A Steenbergen <a href="mailto:ras@e-gerbil.net">ras@e-gerbil.net</a></li>
+<li>Older versions can be found on sourceforge at <a href="http://sourceforge.net/projects/irrpt/">http://sourceforge.net/projects/irrpt/</a></li>
+<li>IPv6 support added by Elisa Jasinska <a href="mailto:elisa@bigwaveit.org">elisa@bigwaveit.org</a> for version 2.0</li>
+<li>Bug Fixes provided by Anna Claiborne <a href="mailto:domino@theshell.org">domino@theshell.org</a> for version 2.0</li>
+</ul>
+<h2 id="summary">Summary</h2>
+<p>A collection of tools which allow ISPs to easily track, manage, and
+utilize IPv4 and IPv6 BGP routing information stored in Internet Routing
+Registry (IRR) databases. Some of these tools include automated IRR data
+retrieval, update tracking via CVS, e-mail notifications, e-mail based
+notification for ISPs who still do human processing of routing information,
+and hooks for automatically deploying prefix-lists on routers.</p>
+<h2 id="purpose">Purpose</h2>
+<p>Internet Routing Registry (IRR) services have existed in various forms for
+some time, yet many ISPs (particularly outside of the European/RIPE
+region) have still not adopted it. There are a variety of reasons given,
+but some of the most important ones include:</p>
+<ol>
+<li>The system is overly complicated, and lacks sufficient examples. End
+users can not figure it out, which means another layer of support
+structure must be added, or proxy registration must be implemented.</li>
+<li>A publicly accessable description of every import and export policy
+to every transit, peer, and customer, is difficult to maintain, and
+is not in the best business interests of many ISPs.</li>
+<li>There are no existing tools which provides registration change
+tracking. Without this kind of tracking, there is not enough
+accountability for prefix registrations, and router configuration
+updates are difficult to manage.</li>
+</ol>
+<p>This tool takes a pragmatic approach, by focusing on the key elements and
+critical goal of the IRR, in order to provide simple and effective prefix-
+list management for the masses. To that end, IRR PowerTools aims to
+provide the following functionality:</p>
+<ul>
+<li>Automated retrieval of prefixes registered behind an IRR Object.</li>
+<li>Automatic exclusion of bogon or other configured undesirable routes.</li>
+<li>Tracking and long-term recording of prefix changes through CVS.</li>
+<li>Automatic aggregation to optimize data and reduce unnecessary changes.</li>
+<li>E-mail updates, letting users know that their change was processed.</li>
+<li>E-mail alerts to the ISP, letting them know of new routing changes.</li>
+<li>Exporting of change data in e-mail form, for non-IRR using ISPs.</li>
+<li>Router config generation, for easy automated config deployment.</li>
+</ul>
+<p>While many ISPs still rely on error-prone e-mail and human processing to
+handle prefix-lists, a few have developed systems similar to this one in
+order to automate their prefix-list management. Unfortunately each of
+these systems is proprietary and owned by the respective ISPs, leaving
+other networks with a choice between spending money and man-hours writing
+duplicating this work, or more often taking the path of least resistance
+and simply using e-mails and human processing.</p>
+<p>This project aims to provide to every network the same features that
+individual ISPs have been developing internally for years. By making it
+easier for every ISP to effectively utilize the IRR data, we hope to
+increase the popularity of the IRR as a prefix-list management tool, which
+will hopefully lead to more accurate data and a more effective system.</p>
+
+<h2 id="requirements">Requirements</h2>
+<ul>
+<li>PHP          &gt;= 7.2.0   (<a href="http://www.php.net/downloads.php">http://www.php.net/downloads.php</a>)</li>
+<li>CVS          Optional   (<a href="http://www.gnu.org/software/cvs/">http://www.gnu.org/software/cvs/</a>)</li>
+<li>CVSweb       Optional   (<a href="http://people.freebsd.org/~scop/cvsweb/">http://people.freebsd.org/~scop/cvsweb/</a>)</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<p>Make sure you have the required packages as listed above installed. Clone
+the git respository in your desired install path via:
+<a href="https://github.com/6connect/irrpt.git">https://github.com/6connect/irrpt.git</a>
+Or, download the zip file and extract.
+Run 'php configure.php' in the base installation directory.</p>
+<p>To get started, you probably want to take a look at every file in
+the /conf directory. The most important information to change will be
+paths and company-specific information such as the name, ASN, and
+e-mail addresses.</p>
+<pre><code>irrpt.conf      - This is the master config file which contains global
+                  configuration information, the paths to our internal
+                  locations and external tools, and internal parameters.
+
+irrdb.conf      - This is the second most important config file,
+                  containing a list of the ASNs and IRR Objects you wish
+                  to track.
+
+nag.conf        - This file contains the settings for the nag process.
+
+nag.msg         - This file contains the message that will be sent
+                  during the nag process.
+
+exclusions.conf - This file lists routes which can not be registered. A
+                  good example for this file would be known bogon routes,
+                  or routes in known unallocated space.
+</code></pre>
+<p>The irrdb.conf file should certain a unique ASN, the IRR object (an
+AS-SET or AUT-NUM record) that you are interested in tracking, and a
+contact e-mail for change notification. You probably want to track your
+own ASN and AS-SET record here as well.</p>
+<p>A reasonable deployment would be to crontab the fetch process once or
+better yet twice a day. If you need to add a new customer outside of
+the normal fetch schedule, or if a customer needs an emergency
+prefix-list update, you can add the ASN/IRR Object to irrdb.conf and
+run a manual pull of just that ASN, with &quot;./fetch ASN&quot;.</p>
+<p>After the updates are processed, you should receive a local copy of the
+e-mail. It is probably reasonable to keep a human being in the loop
+between prefix fetching and prefix deployment, to make certain that
+nothing &quot;bad&quot; or unintended is happening. After you are reasonably
+certain that the changes are ready for deployment, you can generate
+the router configs use the &quot;pfxgen&quot; tool. Optionally, you can nag
+any of your transit providers who still require e-mail updates using
+the nag process.</p>
+<p>If there is anything else that you can't figure out, it is probably
+either a bug or an oversight in the documentation. Send e-mail about
+either one, and I'll make certain it gets addressed in a future
+release.</p>
+<h2 id="documentation">Documentation</h2>
+<p>The operation of IRR PowerTools is broken down into the following distinct
+operations:</p>
+<h3 id="irrpt_fetch">irrpt_fetch</h3>
+<pre><code>$ bin/irrpt_fetch -h
+Usage: bin/irrpt_fetch [-h46qv] [-f file] [--nocvs] [object]
+</code></pre>
+<p>Quiet mode:</p>
+<pre><code>$ bin/irrpt_fetch -q 42
+...
+</code></pre>
+<p>Verbose mode:</p>
+<pre><code>$ bin/irrpt_fetch -v 42
+...
+</code></pre>
+<p>irrpt_fetch uses the list of objects provided by irrdb.conf by
+default.  To track additional objects, simply add them to the
+irrdb.conf file.  To fetch objects for a specific AS, or specific
+object, provide this as an argument per the above example.</p>
+<p>This is the stage where you pull data for the objects that you are
+tracking off of the IRR, and store them locally. Inside the fetch
+process, the following steps are performed:</p>
+<ol>
+<li>Query a IRR whois server for prefixes behind the IRR object.</li>
+<li>Match prefixes (including more-specifics) against the Exclusions
+list, which contains prefixes that can not be registered.</li>
+<li>Store the approved prefixes locally.</li>
+<li>Run the prefixes through an aggregation tool to optimize them.</li>
+<li>Track changes to both the raw and aggregated prefix lists via CVS.</li>
+<li>When changes are detected, send out notification e-mails to
+customers and optionally a local copy to your operations staff,
+alerting everyone that the routing change has been successfully
+processed.</li>
+</ol>
+<h3 id="irrpt_nag">irrpt_nag</h3>
+<pre><code>$ bin/irrpt_nag -h
+Usage: bin/irrpt_nag [-hp] [-c config] [-m message] &lt;previous rev&gt; &lt;current rev&gt;
+
+Options:
+   -p    Preview mode (for diagnostic use). Print results to screen instead of
+         e-mail.
+</code></pre>
+<p>In this stage, any transit providers (or other interested parties)
+who still track prefix-list updates via e-mail rather than via IRR
+can be notified of the change.</p>
+<p>As more providers begin to use IRR, and rely on it as their primary
+prefix tracking tool, this should become less and less necessary.
+Unfortunately many of the largest ISPs still use human processing of
+prefix lists, so for the immediate future you will probably still be
+getting a lot of use out of this tool.</p>
+<h3 id="irrpt_pfxgen">irrpt_pfxgen</h3>
+<pre><code>$ bin/irrpt_pfxgen -h
+Usage: bin/irrpt_pfxgen [-h46] [-p pfxstr] [-p6 pfxstr_v6] [-l pfxlength] [-l6 pfxlength_v6] [-f format] &lt;asn&gt;
+  pfxstr       - The prefix-list name format string (default: CUSTOMER:%d)
+  pfxstr_v6    - The prefix-list name format string (default: CUSTOMERv6:%d)
+  pfxlength    - The max length more-specific that will be allowed (default: 24)
+  pfxlength_v6 - The max length more-specific that will be allowed for v6 (default: 48)
+  format       - The output format for a specific router type (default: cisco)
+                 Currently supported values are:
+                 cisco
+                 ciscoxr
+                 extreme
+                 foundry
+                 force10
+                 juniper
+                 edgeos
+                 huawei
+</code></pre>
+<p>Examples:</p>
+<pre><code>$ bin/irrpt_pfxgen -f cisco 42
+...
+$ bin/irrpt_pfxgen -f juniper 42
+...
+$ bin/irrpt_pfxgen -f extreme 42
+...
+$ bin/irrpt_pfxgen -f force10 42
+...
+$ bin/irrpt_pfxgen -f edgeos 42
+...
+$ bin/irrpt_pfxgen -f huawei 42
+...
+</code></pre>
+<p>In this stage, actual router configurations are generated based on
+the aggregated data we have stored. Currently only the following
+formats are supported, but it should be trivial to add new ones:</p>
+<ol>
+<li>Cisco/Foundry format (and anyone else with a similar CLI)</li>
+<li>Juniper format</li>
+<li>Extreme format</li>
+<li>Force10 format</li>
+<li>EdgeOS format (Vyos/Vyatta should also work)</li>
+<li>Huawei format</li>
+<li>Openbgpd format</li>
+<li>CiscoXR / iosxr format</li>
+</ol>
+<p>These configs can then be deployed automatically using a variety of
+existing tools. Some of these tools include:</p>
+<ul>
+<li>JUNOScript         - <a href="http://www.juniper.net/support/junoscript/">http://www.juniper.net/support/junoscript/</a></li>
+<li>JunOS PyEZ         - <a href="https://www.juniper.net/documentation/en_US/day-one-books/topics/topic-map/how-to-automatically-update-prefix-lists.html">https://www.juniper.net/documentation/en_US/day-one-books/topics/topic-map/how-to-automatically-update-prefix-lists.html</a></li>
+<li>Net::Telnet::Cisco - <a href="http://NetTelnetCisco.sourceforge.net/">http://NetTelnetCisco.sourceforge.net/</a></li>
+<li>Oxidized           - <a href="https://github.com/ytti/oxidized-script">https://github.com/ytti/oxidized-script</a></li>
+</ul>
+<p>Networks may find it appropriate to have an external database in place
+which tracks customer BGP session data, so that you can search by a
+customer name or ASN to automatically find and update only the necessary
+routers and BGP sessions. This is also outside the scope of the current
+project.</p>
+<p>Juniper includes an example config pushing script in the JUNOSCript
+package which works well, despite being a little complicated and having
+something like 68 Perl dependancies.</p>
+<p>Cisco can be configured a number of ways, including various perl
+modules, expect scripts. Due to issues like CLI interactivity delays,
+many users find that simply copying config updates via tftp is an easy
+way to manage changes.</p>
+<p>Many other systems exist as well.</p>
+<h3 id="irrpt_list_prefixes">irrpt_list_prefixes</h3>
+<p>Show prefixes for a given AS or AS-SET, in unaggregated or aggregated form.</p>
+<pre><code>$ bin/irrpt_list_prefixes -h
+Usage: bin/irrpt_list_prefixes [-h46va] &lt;object&gt;
+</code></pre>
+<p>Pull unaggregated prefixes:</p>
+<pre><code>$ bin/irrpt_list_prefixes AS-PCH
+2a01:8840:4::/48
+2a01:8840:5::/48
+...
+</code></pre>
+<p>Pull aggregated prefixes:</p>
+<pre><code>$ bin/irrpt_list_prefixes -a AS-PCH
+2a01:8840:4:2020:2020:2020:2020:2020/47
+...
+</code></pre>
+<p>Verbose mode:</p>
+<pre><code>$ bin/irrpt_list_prefixes -v -a AS-PCH
+...
+- Aggregating routes - aggregating neighboring prefixes...
+* WARNING: Aggregating 2a01:8840:0004:0000:0000:0000:0000:0000/48 and 2a01:8840:0005:0000:0000:0000:0000:0000/48 into 2a01:8840:4:2020:2020:2020:2020:2020/47
+...
+</code></pre>
+<h3 id="irrpt_list_ases">irrpt_list_ases</h3>
+<p>Show AS numbers for a given AS-SET.</p>
+<pre><code>$ bin/irrpt_list_ases -h
+Usage: bin/irrpt_list_ases [-h46] &lt;object&gt;
+</code></pre>
+<p>Example:</p>
+<pre><code>$ bin/irrpt_list_ases AS-PCH
+AS-PCH
+{
+  AS-RS
+  {
+    AS-CHEREDA-SM
+    {
+      AS-RS (dup)
+      AS197058
+      AS21312
+...
+</code></pre>
+<h2 id="faq">FAQ</h2>
+<p>Q) Wouldn't this be more scalable if we stored our config and data in SQL?</p>
+<p>A) Maybe it would. However, the purpose of this project is to open up the
+world of automated IRR-based prefix-lists to every ISP. As such, it is
+designed to be as simple as possible, with the fewest complex external
+dependencies. A well organized network who maintains customer BGP info
+in an existing database should be able to easily export their database
+to our config format. It's the disorganized networks we really have to
+worry about. :)  If you are dealing with so many prefixes that text
+files are too slow, email one of the maintainers.</p>
+<p>Q) Does this tool support RPSLng?</p>
+<p>A) Not right now. This may change in the future (see the TODO file). Feel
+free to let me know your strong interest (or lack thereof) on this issue.</p>
+<p>Q) Does this tool generate AS-PATH filters?</p>
+<p>A) No. Please note that this is not intended as an end-all and be-all
+RPSL tool, or a total replacement for a utility like IRRToolSet. For
+example, this tool does not try to parse aut-num import/export policies,
+try to map every relationship between ASNs, try to write your entire
+route-map for you. This is a pragmatic tool for helping ISPs easily do
+what 95% of them need to do, namely handle prefixes registered behind a
+specific IRR aut-num, route-set, or as-set object. Trying to support
+every possible item which you can document with RPSL is best left to
+academians and the pedantic.</p>
+<h2 id="long-term-goals">Long Term Goals</h2>
+<p>We understand that this is only one step in the direction of making IRR
+truly and globally useful, but hopefully it will prove to be an important
+one. The next logical step towards improving the overall user experience
+would be to design an intuitive web interface for managing records in the
+IRR, so that BGP speaking end-users are not required to learn the
+complexities of RPSL in order to register their routes.</p>
+<p>Hopefully this tool will prove to be useful to a variety of ISPs, and will
+increase the adoption of IRR data over error-prone e-mail updates. When
+more ISPs can make use of this data, and when more end-users are able to
+easily make use of the system, there will hopefully be an increase in
+accurate and maintained data and a reduction in the need to pollute the
+IRR with proxy-registered junk.</p>
+<p>More in the TODO file.</p>
+<h2 id="thanks">Thanks</h2>
+<p>Joe Abley for the very useful aggregate tool which was used in initial
+versions, Chris Morrow for nagging me into releasing this publicly, and all
+the folks in the ChangeLog who helped pick out the bugs.</p>
+<p>A special thanks to Jon Nistor for many many rounds of QA for version 2.0.</p>
+<h2 id="change-log">Change Log</h2>
+<p>2.1 - Jun 2021 (release pending)</p>
+<ul>
+<li>Add: pfxgen added support for iosXR</li>
+<li>Add: pfxgen added support for Ubiquity EdgeOS (@mikenowak)</li>
+<li>Add: pfxgen added support for openbgpd</li>
+<li>Add: pfxgen added support for Huawei (@miuvlad)</li>
+<li>Enh: more help options</li>
+<li>Enh: AS Object name is now fetched when run via the CLI by specifying a single AS number</li>
+<li>Fix: undefined offset in aggreagte.inc</li>
+<li>Fix: cosmetic issue on completed notices</li>
+<li>Fix: remove Cisco prefix-list associated with proper address family</li>
+<li>Fix: prefix lengths not properly checked (juniper, iosxr, f10, extreme)</li>
+<li>Fix: Force10 pfxgen syntax issue</li>
+<li>Fix: Email notifications comparing full routes and full agg file (@gawul)</li>
+<li>Fix: iosXR pfxgen generates blank entry for prefixes not matching length (@bonev)</li>
+<li>Fix: PHP 7.2.0 behaviour change using count(), fixed errors under Juniper pfxgen</li>
+<li>Fix: Mask php errors for connection timeout, report proper host timeout.</li>
+<li>Fix: reduced connection timeout to 15s, down from 30s.</li>
+<li>Fix: typo in iosxr/ciscoxr (@Bierchermuesli)</li>
+<li>Fix: last line of JunOS generation did not have a carriage return (@rlhennig)</li>
+<li>Fix: Not having CVS no longer bails on initial setup.</li>
+<li>Fix: v6 addresses are all now in compressed format when processing.</li>
+<li>Fix: TCP reconnect back to whois server if connection drops (@tallwireless)</li>
+<li>Fix: irrpt_list_ases did not include ASNs which had a single prefix</li>
+<li>Fix: readme cleanup</li>
+<li>Fix: Removed extra carriage return in concatenated files</li>
+<li>Chg: Required PHP version bumped from 5.4 to 7.2</li>
+</ul>
+<p>2.0 - Aug / Sep / Oct 2015</p>
+<p>Changes for version 2.0 by Anna Claiborne <a href="mailto:domino@theshell.org">domino@theshell.org</a>:</p>
+<ul>
+<li>Tagging new version as 2.0</li>
+<li>Removed system calls from configure.php</li>
+<li>Updated configure.php print out to be more easily parsible/readable</li>
+<li>Updated readme docs for version 2.0</li>
+<li>Created configure.php for initial setup and cvs directory restore</li>
+<li>Fixed Force10 prefix list syntax in pfxgen</li>
+<li>Fixed bugs found in running with PHP 7</li>
+<li>Removed extra and eroneous space from generated emails</li>
+<li>Fixed irrpt_fetch to check file ownership before attempting permission
+changes</li>
+<li>Removed calls to system to concatenate v4/v6 route files.  Now performed by
+php function in utils.inc</li>
+<li>Provided support to leave email in irrdb.conf blank if the user wishes no
+email updates for a particular as/object</li>
+<li>Fixed support for separate (correct) v4 and v6 prefix list for Juniper config.</li>
+<li>Added AS validation/checking for pfxgen</li>
+</ul>
+<p>Changes for version 2.0 by Elisa Jasinska <a href="mailto:elisa@bigwaveit.org">elisa@bigwaveit.org</a>:</p>
+<ul>
+<li>Added v6 support to IRR query, to prefix exclusion via
+exclusions.conf, to aggregation and to the prefix generator</li>
+<li>Implemented aggregate functionality and removed dependency on the
+external agregate tool</li>
+<li>-4 and -6 switches for all command line tools</li>
+<li>Renamed irrpt_eval and irrpt_explorer into irrpt_list_ases
+and irrpt_list_prefixes</li>
+<li>Added -f option to provide location to irrdb.conf file</li>
+<li>Added --nocvs option to omit cvs tracking</li>
+<li>Bug fix for irrpt_list_ases with -6/-4</li>
+<li>Improved as number vs as string handling in irrpt_fetch</li>
+<li>Updated config for correct default cvs path</li>
+<li>Improved ioverall as/as-set input format checking</li>
+<li>Changed irrpt_list_prefixes to provide aggregated v6 routes in compressed
+form instead of expanded</li>
+<li>Added command lines options for seperate v4 and v6 perfix list names</li>
+<li>Added warning when 0 routes found for AS</li>
+<li>Added v4/v6 command line switches to irrpt_list_ases</li>
+<li>Better input validation for AS numbers and AS Sets as well as case sensitivity issues
+resolved</li>
+</ul>
+<p>1.28 - June 8 2015</p>
+<ul>
+<li>Making the latest version compatible with TORIX changes, such as: -q quiet
+mode, timezone support and memory limit support by Elisa Jasinska
+<a href="mailto:elisa@bigwaveit.org">elisa@bigwaveit.org</a>.</li>
+</ul>
+<p>1.27 - Feb 8 2008</p>
+<ul>
+<li>Redesigned (and simplified) the CVS diff code. The options are now
+&quot;fulldiff&quot; (basically the complete output of a normal CVS diff, that
+you could actually use to patch a file), &quot;plusminus&quot; (stripped down
+to only a list of prefix changes), and &quot;english&quot; (aka &quot;Cogent Mode&quot;,
+for NOCs who can't quite figure out what the + and - symbols might
+mean). This was supposed to have been done back in 1.20, but this
+version actually makes it work.</li>
+</ul>
+<p>1.26 - June 8 2007</p>
+<ul>
+<li>
+<p>Added support for Force10 prefix-list format. The style is JUST
+different enough from Cisco to be incompatible, you have to enter a
+hierarchy under the prefix-list declaration and then enter the permit
+lines seperately, rather than stating it all on one line. Thanks to
+Greg Hankins for pointing this out and providing the fix.</p>
+</li>
+<li>
+<p>Added support for 32-bit (4-byte) ASNs. The #.# format (who's stupid
+idea was that anyways :P) was being detected as an IP address and the
+result of a route-set. Added an additional check to make it detect as
+an object to be be further queried, not that it will help since it
+seems the IRRd software (which is the only protocol we support, for
+various reasons) doesn't currently like importing this format either,
+but at least it won't be IRRPT's fault when it doesn't work. :)</p>
+<p>Thanks to: those wonderful euros who just had to actually go and try
+those new ASNs out ASAP, thus killing all the Farce10 and JUNOS 8.3R1
+boxes on the planet. Go go gadget incompatibility. :)</p>
+</li>
+</ul>
+<p>1.25 - May 27 2006</p>
+<ul>
+<li>
+<p>Added an option to automatically change uid/gid to a specified id if
+run as root. CVS will not let you run as root, so you should have a
+dedicated user anyways, but sometimes people forget.</p>
+</li>
+<li>
+<p>Completely changed the way we process arguments, php getopt() sucks.</p>
+</li>
+<li>
+<p>Fixed a plethoa of bugs in irrpt_nag. I don't know how you guys were
+even using this before, or why no one told me how broken this was
+before now. :)</p>
+</li>
+<li>
+<p>Changed the default subject line of irrpt_nag, put the ASN info in
+the front for a quicker read on narrow terminals.</p>
+</li>
+</ul>
+<p>1.24 - December 29 2005</p>
+<ul>
+<li>
+<p>Added an &quot;ASN list&quot; file which records the ASNs behind each object. This
+may be used to implement some kind of AS-PATH filtering in the future I
+suppose, though it really isn't the right tool for the job. Talked into
+this evilness by Jon Nistor <a href="mailto:nistor@snickers.org">nistor@snickers.org</a>.</p>
+</li>
+<li>
+<p>Fixed a really silly mistake in the processing of &quot;english&quot; style output.</p>
+</li>
+<li>
+<p>Added a new tool &quot;irrpt_explorer&quot;, which queries and displays the
+contents of an AS-SET in a hierarchal and recursive format.</p>
+</li>
+<li>
+<p>Removed some unnecessary code in irrpt_eval.</p>
+</li>
+</ul>
+<p>1.23 - November 18 2005</p>
+<ul>
+<li>
+<p>Changed $_SERVER['SCRIPT_FILENAME'] references to <strong>FILE</strong> to work around
+some portability issues with certain PHP builds (like apparently, RedHat).
+Pointed out by Joshua Sahala <a href="mailto:jejs@sahala.org">jejs@sahala.org</a>.</p>
+</li>
+<li>
+<p>Fixed the -p flag (preview mode) on irrpt_nag. It works better if you
+actually have &quot;p&quot; in getopt(). Pointed out by Christian Malo
+<a href="mailto:chris@fiberpimp.net">chris@fiberpimp.net</a>.</p>
+</li>
+</ul>
+<p>1.22 - November 8 2005</p>
+<ul>
+<li>
+<p>Fixed irrpt_eval -a (aggregate) functionality. Pointed out by
+Jon Nistor <a href="mailto:nistor@snickers.org">nistor@snickers.org</a>.</p>
+</li>
+<li>
+<p>Added support for ExtremeWare prefix generation. Submitted by Tom
+Hodgson.</p>
+</li>
+<li>
+<p>A documentation tweak noting that PHP &gt;= 4.3 is required. Submitted
+by Tom Hodgson.</p>
+</li>
+<li>
+<p>Added a note regarding Debian's &quot;aggregate&quot; package to the README.</p>
+</li>
+<li>
+<p>Got a little carried away getting rid of Nistor's strict errors. Rolling
+some things back to continue supporting php 4, easier solution is just
+not to turn on E_STRICT.</p>
+</li>
+<li>
+<p>Added some example scripts for router configuration deployment. Updated
+documentation to reflect these changes.</p>
+</li>
+<li>
+<p>Nailed down a few bugs with caching results that had incorrect array
+indexes following sort and unique. Extensive troubleshooting by Jon
+Nistor <a href="mailto:nistor@snickers.org">nistor@snickers.org</a>.</p>
+</li>
+<li>
+<p>Added a quick optimization to only parse the exclusions file once (well
+most of the time at any rate).</p>
+</li>
+<li>
+<p>A couple of minor bugfixes and documentation changes from the previous
+release.</p>
+</li>
+</ul>
+<p>1.20 - November 7 2005</p>
+<ul>
+<li>
+<p>Added support for handling a route-set object, and revised the as-set code
+to be a little more generic/graceful while handling it. Issue noted by
+Jon Nistor <a href="mailto:nistor@snickers.org">nistor@snickers.org</a>.</p>
+</li>
+<li>
+<p>Added a new tool &quot;irrpt_eval&quot; which returns a simple plain-text list of
+routes from an arbitrary IRR object, using the irrpt query engine. This
+can be useful for diagnostics/quick lookups, and is similar to the
+IRRToolSet tool &quot;peval&quot;. Requested by Aaron Weintraub.</p>
+</li>
+<li>
+<p>Fixed some class definitions to comply with php strict mode. Contributed
+by Jon Nistor <a href="mailto:nistor@snickers.org">nistor@snickers.org</a>.</p>
+</li>
+<li>
+<p>When an IRR query fails, the query that resulted in the failure is now
+displayed (verbose mode required). Nagged to death by Jon Nistor
+<a href="mailto:nistor@snickers.org">nistor@snickers.org</a>.</p>
+</li>
+<li>
+<p>Added a config option for controlling the e-mail updates which are sent
+when a route change is detected:</p>
+<p>irrpt.conf: ['fetch']['emailonchange']</p>
+<p>User can now specify whether to send emails for updated detected in the
+&quot;full&quot; (unaggregated) route file, the &quot;aggregated&quot; route file, &quot;both&quot;
+(default), or &quot;none&quot;. Requested by Jon Nistor <a href="mailto:nistor@snickers.org">nistor@snickers.org</a></p>
+</li>
+<li>
+<p>Added an option for &quot;english&quot; language diff format. Apparently the Cogent
+NOC can't figure out what &quot;+&quot; and &quot;-&quot; means, so &quot;english&quot; mode changes
+the output to &quot;Add&quot; and &quot;Remove&quot; (and is the new default). There is
+also an option to continue using + and - (&quot;plusminus&quot;) but to remove the
+full &quot;diff&quot; headers. The old behavior is retained under the setting
+&quot;fulldiff&quot;. Requested by Adam Rothschild.</p>
+<p>irrpt.conf: ['diff']['output_format']</p>
+</li>
+<li>
+<p>Added a new flag &quot;-p&quot; to irrpt_nag, which enables preview mode. In
+preview mode, the contents of the email(s) which would be sent are
+output to stdout instead of being emailed. This allows you to
+double-check the e-mails before actually sending them. Requested by
+Adam Rothschild.</p>
+</li>
+<li>
+<p>Changed the format of ['pfxgen']['default_pfxname'], and renamed it to
+default_pfxstr. It is now handled as a printf()-style format string, with
+one argument (the ASN). For example, to generate &quot;CUSTOMER:1234&quot; use the
+string: &quot;CUSTOMER:%d&quot;. Requested by Pierfrancesco Caci.</p>
+</li>
+<li>
+<p>Updated the distributed (but commented out) example exclusions.conf, just
+incase someone decides to uncomment it without obtaining the current
+exclusions list themselves.</p>
+</li>
+<li>
+<p>A bunch of small misc. changes in formatting and alignment. Largely
+requested by Jon Nistor <a href="mailto:nistor@snickers.org">nistor@snickers.org</a></p>
+</li>
+</ul>
+<p>1.10 - December 29 2004</p>
+<ul>
+<li>
+<p>Added an optional local cache for prefixes queried from an aut-num
+record, under the assumption that many networks will have as-set
+records which contain overlapping aut-num records. This will increase
+memory usage a bit, but results in significantly faster queries from
+the IRR whois servers for those with a large number of IRRDB entries.
+Cache is enabled by default. Suggested by Arnold Nipper.</p>
+</li>
+<li>
+<p>Fixed a bug in the default CVS files which would cause an error
+message when fetch is run from a directory other than the default
+&quot;/usr/local/irrpt&quot;.</p>
+</li>
+<li>
+<p>Commented out the default bogon routes in the distributed exclusions
+config file, so users must choose to explicitly enable it. Hopefully
+this will prevent the blind use of potentially out of date bogon
+information, and avoid unnecessary whining on mailing lists every
+time a RIR is allocated a new /8.</p>
+</li>
+</ul>
+<p>1.00 - December 26 2004</p>
+<ul>
+<li>Initial public release.</li>
+</ul>
+
+        <script async src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+        
+    </body>
+    </html>
