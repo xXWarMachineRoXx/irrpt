@@ -10,18 +10,19 @@ const changeFavicon = () => {
 
 // modal handling ( verify installation)
 
-// var form = document.getElementById("verify-install-form");
-// function handleForm(event) { event.preventDefault(); } 
-// form.addEventListener('submit', handleForm);
+var form = document.getElementById("verify-install-form");
+function handleForm(event) { event.preventDefault(); } 
+form.addEventListener('submit', handleForm);
 
-// function openModal() {
-//   const modal_trigger_button= document.getElementById('verify-install-button');
-//   modal_trigger_button.click();
-//   return false;
-// }
+function openModal() {
+  const modal_trigger_button= document.getElementById('verify-install-button');
+  modal_trigger_button.click();
+  return false;
+}
 
 // External = {
 //   'wow': function() {
 //     console.log('Wowsers!');
 //   }
 // };
+

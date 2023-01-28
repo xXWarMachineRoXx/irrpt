@@ -4,6 +4,7 @@ include_once "php/components/modal.php";
 include_once "php/utils.php";
 include_once "php/components/footer.php";
 
+
 $GLOBALS['absolute_path'] = __DIR__;
 // $GLOBALS['relative_path']='';
 // define('PROJECT_DIR', preg_replace('/^' . preg_quote($_SERVER['DOCUMENT_ROOT'], '/')));
@@ -35,11 +36,11 @@ $GLOBALS['absolute_path'] = __DIR__;
                     switch ($GLOBALS['retval']) {
                         case 0:
                             # code...
-                            echo modal('Sucess', 'No error');
+                            echo modal('Success', 'Installation successfully verified ! ',$GLOBALS['retval']);
                             break;
                         
                         case 1:
-                            echo modal('Error', ' Please check your Installation');
+                            echo modal('Error', ' Please check your Installation',$GLOBALS['retval']);
                             break;
                     }
                     

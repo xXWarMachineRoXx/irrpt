@@ -1,4 +1,4 @@
 {
     "php.version": "7.4.3",
-    "editor.acceptSuggestionOnEnter": "smart",
+    // "editor.acceptSuggestionOnEnter": "smart",
 }
