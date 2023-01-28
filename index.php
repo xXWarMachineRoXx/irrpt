@@ -31,7 +31,7 @@ include_once "footer.php";
                     switch ($GLOBALS['retval']) {
                         case 0:
                             # code...
-                            echo modal('Sucess', 'No error');
+                            echo modal('Success', 'No error');
                             break;
                         
                         case 1:
