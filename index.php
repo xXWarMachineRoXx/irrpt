@@ -3,6 +3,10 @@ include_once "php/components/header.php";
 include_once "php/components/modal.php";
 include_once "php/utils.php";
 include_once "php/components/footer.php";
+
+$GLOBALS['absolute_path'] = __DIR__;
+// $GLOBALS['relative_path']='';
+// define('PROJECT_DIR', preg_replace('/^' . preg_quote($_SERVER['DOCUMENT_ROOT'], '/')));
 ?>
 <body class="d-flex h-100 text-center text-white bg-dark">
     <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
@@ -11,7 +15,7 @@ include_once "php/components/footer.php";
                 <h3 class="float-md-start mb-0">tbRC</h3>
                 <nav class="nav nav-masthead justify-content-center float-md-end">
                     <a class="nav-link active" aria-current="page" href="#">Home</a>
-                    <a class="nav-link" href="#">Features</a>
+                    <a class="nav-link" href="pages/features.php">Features</a>
                     <a class="nav-link" href="#">Contact</a>
                 </nav>
             </div>
