@@ -1,7 +1,7 @@
 <?php
 
 
-include "/php/components/header.php";
+include "../components/header.php";
 
 
 ?>

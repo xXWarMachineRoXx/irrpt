@@ -1,4 +1,13 @@
 <?php
+
+$root = $_SERVER['DOCUMENT_ROOT'];
+$dir = dirname(__DIR__);
+$root = str_replace("\\","/",$root);
+$dir = str_replace("\\","/",$dir);
+$web_dir = str_replace($root,'',$dir);
+if ($web_dir!=='') { $web_dir = '/'.$web_dir; }
+define('DIR',$web_dir);
+
 $verify_clicked = false;
 function console_log($output, $with_script_tags = true)
 {
