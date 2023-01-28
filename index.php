@@ -1,8 +1,8 @@
 <?php
-include_once "header.php";
-include_once "modal.php";
-include_once "utils.php";
-include_once "footer.php";
+include_once "php/components/header.php";
+include_once "php/components/modal.php";
+include_once "php/utils.php";
+include_once "php/components/footer.php";
 ?>
 <body class="d-flex h-100 text-center text-white bg-dark">
     <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
