@@ -6,8 +6,8 @@ include "../php/components/header.php";
 
 ?>
 
-<body data-bs-theme="light">
-    <div class="d-flex  text-center   ">
+<body data-bs-theme="dark">
+    <div class="d-flex  text-center ">
         <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
 
             <?php echo pHeader(); ?>
@@ -15,14 +15,15 @@ include "../php/components/header.php";
     </div>
     <div class="d-flex mt-5 text-center  ">
         <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+           
 
             <div class="container" >
                 <div class="card">
-                    <h5 class="card-header">Featured</h5>
+                    <h5 class="card-header">Fetch</h5>
                     <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-dark">Go somewhere</a>
+                        <h5 class="card-title">IRR  Prefix Management</h5>
+                        <p class="card-text">Manage IRR prefixes that includes querying a server, checking against exclusions, storing approved prefixes, aggregating them, tracking changes, and sending notifications.</p>
+                        <a href="fetch.php" class="btn btn-primary ">Configure Fetch</a>
                     </div>
                 </div>
             </div>

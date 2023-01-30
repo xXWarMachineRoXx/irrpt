@@ -4,7 +4,7 @@ include "php/components/header.php";
 
 ?>
 
-<body>
+<body data-bs-theme="dark">
 <div class="container" data-bs-theme="dark">
   <div class="row">
     <div class="col-sm">
@@ -18,4 +18,5 @@ include "php/components/header.php";
 </div>
   
   </div>
+ 
 </body>
